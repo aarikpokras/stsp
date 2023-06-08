@@ -1,0 +1,44 @@
+# stsp by Aarik Pokras.
+# Dependencies: df, printf, echo, test, column, function
+# gh @aarikpokras
+
+function f1000 {
+  printf "Filesystem  Size    Used    Avail   Use\x25 Mounted on\n"
+  df -H | grep -w "/" --color=never
+}
+function f1024 {
+  printf "Filesystem  Size    Used    Avail   Use\x25 Mounted on\n"
+  df -h | grep -w "/" --color=never
+}
+function fCfs {
+  printf "Filesystem Size Used Avail Use\x25 Mounted on\n"
+  df -h | grep -w $search_var --color=never
+}
+function wel {
+  printf "stsp | $1 $2 $3 $4\n"
+}
+
+if [ -n "$1" ]; then
+  if [ "$1" == "only-main" ] && [ "$2" == "1000" ];then
+    wel
+    f1000 | column -t
+  elif [ "$1" == "only-main" ] && [ "$2" == "1024" ];then
+    wel
+    f1024 | column -t
+  elif [ "$1" == "-h" ];then
+    printf "only-main		Returns only the main disk info\n	1024		Print in base-1024 (MiB, etc.)\n	1000		Print in base-1000 (MB, etc.)\ncfs			Only display information for a certain filesystem [name]\n-h			Help message\n"
+  elif [ "$1" == "cfs" ] && [ -n "$2" ]; then
+    printf "\e[1;31mWarning: Printing in base-1024\e[0m\n"
+    search_var=$2
+    fCfs | column -t
+  elif [ "$1" == "cfs" ] && [ -z "$2" ]; then
+    echo Please specify filesystem.
+  #
+  elif [ -z "$2" ] && [ "$1" != "-h" ] && [ "$1" == "only-main" ]; then
+    echo Please specify only-main command.
+  else
+    echo Invalid arg. Use -h for help.
+  fi
+else
+  echo No command specified.
+fi
