@@ -1,6 +1,7 @@
 # stsp by Aarik Pokras.
 # Dependencies: df, printf, echo, test, column, function
 # gh @aarikpokras
+#!/bin/bash
 
 function f1000 {
   printf "Filesystem  Size    Used    Avail   Use\x25 Mounted on\n"
